@@ -1,14 +1,16 @@
 package main
 
 import (
+	"log"
 	"os"
 )
 
 func main() {
-	nf, err := os.Open("logs.txt")
-	defer nf.Close()
+	lf, err := os.OpenFile("logs.txt", os.O_CREATE|os.O_APPEND|os.O_WRONLY, 0666)
+	defer lf.Close()
 	if err != nil {
-		nf.Write([]byte("File creation failed."))
+		log.Printf("OpenFile failed:%s", err)
 	}
-	nf.Write([]byte("Hello, World!"))
+	log.SetOutput(lf)
+	log.Println("Hello, World!")
 }
