@@ -7,3 +7,5 @@
 > - The error has been logged.
 > - The application is back to 100% integrity.
 > - The current error is not reported any longer.
+
+[HoneyBadger on Logging](https://www.honeybadger.io/blog/golang-logging/)

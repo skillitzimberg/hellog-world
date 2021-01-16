@@ -1,23 +1,37 @@
 package main
 
 import (
+	"io"
 	"log"
 	"os"
 )
 
-func main() {
+var (
+	infoLog  *log.Logger
+	errorLog *log.Logger
+)
+
+func init() {
 	lf, err := os.OpenFile("logs.txt", os.O_CREATE|os.O_APPEND|os.O_WRONLY, 0666)
 	defer lf.Close()
 	if err != nil {
 		log.Printf("Opening log file failed:%s", err)
 	}
-	log.SetOutput(lf)
-	log.Println("Hellog, World!")
+	infoLog = newLogger(lf, "INFO: ")
+	infoLog.Println("Hellog, World!")
+	errorLog = newLogger(lf, "ERROR: ")
 
+}
+
+func main() {
 	cf, err := os.Create("output.txt")
 	if err != nil {
-		log.Printf("Creating output file failed: %s", err)
+		errorLog.Printf("Creating output file failed: %s", err)
 	}
 
-	cf.Write([]byte("Here are your results: . . ."))
+	cf.Write([]byte("New results: . . ."))
+}
+
+func newLogger(w io.Writer, p string) *log.Logger {
+	return log.New(w, p, log.Ldate|log.Ltime|log.Lshortfile)
 }
